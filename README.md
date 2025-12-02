@@ -1,238 +1,260 @@
-<h1 align="center">🎬 Netflix Shows and Movies Project</h1>
+# Retail Sales Analysis SQL Project
 
-<p align="center">
-  <img src="https://cdn.dribbble.com/userupload/34116929/file/original-26e501e97684a115bfff294b1f1d41b0.png" width="600">
-</p>
+## Project Overview
 
-<br>
+**Project Title**: Retail Sales Analysis  
+**Level**: Beginner  
+**Database**: `Sales_Analysis`
 
-<p align="center">
-  🧰 <b>Tools Used:</b> MySQL, Python
-</p>
+This project is designed to demonstrate SQL skills and techniques typically used by data analysts to explore, clean, and analyze retail sales data. The project involves setting up a retail sales database, performing exploratory data analysis (EDA), and answering specific business questions through SQL queries. This project is ideal for those who are starting their journey in data analysis and want to build a solid foundation in SQL.
 
-<p align="center">
-  📂 <b>Dataset Used:</b>
-  <a href="https://www.kaggle.com/datasets/victorsoeiro/netflix-tv-shows-and-movies?select=titles.csv" target="_blank">
-    Netflix TV Shows and Movies (Kaggle)
-  </a>
-</p>
+## Objectives
 
-<p align="center">
-  🧾 <b>SQL Analysis:</b>
-  <a href="https://github.com/HeyChamp29/Netflix-Shows-and-Movies-SQL/blob/main/NetflixProj.sql" target="_blank">
-    View SQL Script
-  </a>
-</p>
+1. **Set up a retail sales database**: Create and populate a retail sales database with the provided sales data.
+2. **Data Cleaning**: Identify and remove any records with missing or null values.
+3. **Exploratory Data Analysis (EDA)**: Perform basic exploratory data analysis to understand the dataset.
+4. **Business Analysis**: Use SQL to answer specific business questions and derive insights from the sales data.
 
-<p align="center">
-  📊 <b>Power BI Dashboard:</b>
-  <a href="https://github.com/HeyChamp29/Netflix-Shows-and-Movies-SQL/blob/main/NetflixDashboard(PowerBi).png" target="_blank">
-    View Dashboard
-  </a>
-</p>
+## Project Structure
 
-<br>
+### 1. Database Setup
 
-<div align="center" style="max-width:800px;">
-  <p>
-    <b>Business Problem:</b> 🎯 Netflix wants to gain a deeper understanding of subscriber preferences and content performance across its vast library of shows and movies. With over 82,000 records spanning multiple genres, countries, and years, manually analyzing this data is nearly impossible. Without proper insights, it becomes challenging to make data-driven decisions for content strategy, marketing, and viewer engagement. Netflix needs a robust, scalable method to extract meaningful patterns that highlight popular genres, trending releases, and regional preferences.
-  </p>
+- **Database Creation**: The project starts by creating a database named `Sales_Analysis`.
+- **Table Creation**: A table named `retail_sales` is created to store the sales data. The table structure includes columns for transaction ID, sale date, sale time, customer ID, gender, age, product category, quantity sold, price per unit, cost of goods sold (COGS), and total sale amount.
 
-  <p>
-    <b>Solution Approach:</b> 🛠️ I will leverage SQL to process and analyze the large dataset efficiently, enabling the extraction of key metrics such as average viewer ratings, genre distribution, release trends, and country-wise popularity. Once the data is prepared, I will use Tableau to create interactive dashboards and visualizations that allow Netflix stakeholders to explore the insights dynamically. This approach ensures that trends and patterns are easily understandable, actionable, and can directly inform Netflix’s content acquisition, recommendation systems, and marketing strategies.
-  </p>
-</div>
+```sql
+-- CREATE TABLE 
+DROP TABLE IF EXISTS retail_sales; 
+CREATE TABLE retail_sales 
+			(
+				transactions_id INT PRIMARY KEY,
+				sale_date DATE,
+				sale_time TIME,
+				customer_id	INT,
+				gender VARCHAR(15),
+				age	INT,
+				category VARCHAR(15),	
+				quantity INT,	
+				price_per_unit FLOAT,
+				cogs FLOAT,	
+				total_sale FLOAT
+			);
+            
 
-<br>
+SET GLOBAL local_infile = 1;
 
-<h2>❓ Questions I Wanted To Answer From the Dataset:</h2>
+-- Loading Data
 
-<br>
-<h2>1. Which movies and shows on Netflix ranked in the top 10 and bottom 10 based on their IMDB scores?</h2>
-<br>
+LOAD DATA LOCAL INFILE '/Users/amanjayeshshah/Desktop/Retail-Sales-Analysis-SQL-Project--P1/SQL - Retail Sales Analysis_utf .csv'
+INTO TABLE Sales_Analysis.retail_sales
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(
+  transactions_id,
+  sale_date,
+  sale_time,
+  customer_id,
+  gender,
+  @age,
+  category,
+  @quantity,
+  @price_per_unit,
+  @cogs,
+  @total_sale
+)
+SET
+  age          = NULLIF(@age, ''),
+  quantity     = NULLIF(@quantity, ''),
+  price_per_unit = NULLIF(@price_per_unit, ''),
+  cogs         = NULLIF(@cogs, ''),
+  total_sale   = NULLIF(@total_sale, '');
+```
 
-<h3>🎥 Top 10 Movies</h3>
+### 2. Data Exploration & Cleaning
 
-<h3>🎥 Top 10 Movies</h3>
+- **Record Count**: Determine the total number of records in the dataset.
+- **Customer Count**: Find out how many unique customers are in the dataset.
+- **Category Count**: Identify all unique product categories in the dataset.
+- **Null Value Check**: Check for any null values in the dataset.
 
-<ul>
-  <li>
-    <b>SQL Query:</b>
-    <pre><code>
-CREATE VIEW TOP10_MOVIES AS 
+```sql
+SELECT COUNT(*) FROM retail_sales;
+SELECT COUNT(DISTINCT customer_id) FROM retail_sales;
+SELECT DISTINCT category FROM retail_sales;
+
+SELECT * FROM retail_sales
+WHERE 
+    sale_date IS NULL OR sale_time IS NULL OR customer_id IS NULL OR 
+    gender IS NULL OR age IS NULL OR category IS NULL OR 
+    quantity IS NULL OR price_per_unit IS NULL OR cogs IS NULL;
+```
+
+### 3. Data Analysis & Findings
+
+The following SQL queries were developed to answer specific business questions:
+
+1. **Write a SQL query to retrieve all columns for sales made on '2022-11-05**:
+```sql
+SELECT * FROM retail_sales;
+
+CREATE VIEW sale_made_on_2022_11_05 AS
+
+SELECT * FROM retail_sales
+WHERE sale_date = '2022-11-05';
+
+SELECT * FROM sale_made_on_2022_11_05;
+```
+
+2. **Write a SQL query to retrieve all transactions where the category is 'Clothing' and the quantity sold is more than 4 in the month of Nov-2022**:
+```sql
+CREATE VIEW TRANSACTION_FOR_CLOTHING AS 
+SELECT *
+FROM retail_sales
+WHERE category = 'Clothing'
+  AND DATE_FORMAT(sale_date, '%Y-%m') = '2022-11'
+  AND quantity >= 4;
+  
+SELECT * FROM TRANSACTION_FOR_CLOTHING;
+```
+
+3. **Write a SQL query to calculate the total sales (total_sale) for each category.**:
+```sql
+CREATE VIEW TOTAL_SALE_BY_CATEGORY AS
+SELECT
+	Category,
+	SUM(total_sale) AS Total_Sale
+FROM retail_sales
+GROUP BY Category
+ORDER BY Total_Sale DESC;
+
+SELECT * FROM TOTAL_SALE_BY_CATEGORY;
+```
+
+4. **Write a SQL query to find the average age of customers who purchased items from the 'Beauty' category.**:
+```sql
+CREATE VIEW AVG_AGE_WHO_PURCHASED_BEAUTY AS 
 SELECT 
-  TITLE,
-  TYPE,
-  IMDB_SCORE
-FROM netflix_titles
-WHERE TYPE = 'MOVIE'
-ORDER BY IMDB_SCORE DESC
-LIMIT 10;
+	CATEGORY,
+	ROUND(AVG(AGE),2)
+FROM retail_sales
+GROUP BY CATEGORY
+HAVING CATEGORY = 'BEAUTY';
 
-SELECT * FROM TOP10_MOVIES;
-    </code></pre>
-  </li>
+SELECT * FROM AVG_AGE_WHO_PURCHASED_BEAUTY;
+```
 
-  <li>
-    <b>Result:</b>
-    <br><br>
-    <p align="center">
-      <img src="https://github.com/HeyChamp29/Netflix-Shows-and-Movies-SQL/blob/main/Question1.png" width="700">
-    </p>
-  </li>
-</ul>
-
-<br>
-
-<h3>📺 Top 10 Shows</h3>
-
-<ul>
-  <li>
-    <b>SQL Query:</b>
-    <pre><code>
-CREATE VIEW TOP10_SHOWS AS 
+5. **Write a SQL query to find all transactions where the total_sale is greater than 1000.**:
+```sql
+CREATE VIEW TOTAL_SALE_GR8_THAN_1000 AS
 SELECT 
-  TITLE,
-  TYPE,
-  DESCRIPTION,
-  RELEASE_YEAR,
-  IMDB_SCORE
-FROM netflix_titles
-WHERE TYPE = 'SHOW'
-ORDER BY IMDB_SCORE DESC
-LIMIT 10;
+	* FROM retail_sales
+WHERE total_sale >= 1000;
 
-SELECT * FROM TOP10_SHOWS;
-    </code></pre>
-  </li>
+SELECT * FROM TOTAL_SALE_GR8_THAN_1000;
+```
 
-  <li>
-    <b>Result:</b>
-    <br><br>
-    <p align="center">
-      <img src="https://github.com/HeyChamp29/Netflix-Shows-and-Movies-SQL/blob/main/Question2.png" width="700">
-    </p>
-  </li>
-</ul>
-
-<h3>🎞️ Bottom 10 Movies</h3>
-
-<ul>
-  <li>
-    <b>SQL Query:</b>
-    <pre><code>
-CREATE VIEW BOTTOM10_MOVIES AS
+6. **Write a SQL query to find the total number of transactions (transaction_id) made by each gender in each category.**:
+```sql
+CREATE VIEW total_no_of_transactions_by_gender AS 
 SELECT 
-  TITLE, 
-  TYPE, 
-  IMDB_SCORE
-FROM netflix_titles
-WHERE TYPE = 'MOVIE' 
-  AND IMDB_SCORE IS NOT NULL
-ORDER BY IMDB_SCORE ASC
-LIMIT 10;
+	CATEGORY,
+	COUNT(*) AS TOTAL_NO_OF_TRANSACTIONS,
+    GENDER
+FROM retail_sales
+GROUP BY Category ,gender
+ORDER BY TOTAL_NO_OF_TRANSACTIONS DESC;
 
-SELECT * FROM BOTTOM10_MOVIES;
-    </code></pre>
-  </li>
+SELECT * FROM total_no_of_transactions_by_gender;
+```
 
-  <li>
-    <b>Result:</b>
-    <br><br>
-    <p align="center">
-      <img src="https://github.com/HeyChamp29/Netflix-Shows-and-Movies-SQL/blob/main/Question3.png" width="700">
-    </p>
-  </li>
-</ul>
+7. **Write a SQL query to calculate the average sale for each month. Find out best selling month in each year**:
+```sql
+WITH Monthly_Avg AS (
+	SELECT
+		YEAR(sale_date) AS Year,
+        MONTH(sale_date) AS Month,
+        ROUND(AVG(total_sale),2) AS Avg_Sale
+	FROM Retail_sales
+    GROUP BY YEAR(sale_date),MONTH(sale_date)
+)
+SELECT *
+FROM (
+	SELECT
+        Year,
+        Month,
+        Avg_Sale,
+        RANK() OVER (PARTITION BY Year ORDER BY Avg_Sale DESC) AS rank_month
+	FROM monthly_avg
+)ranked
+where rank_month = 1;
+```
 
-<br>
+8. **Write a SQL query to find the top 5 customers based on the highest total sales **:
+```sql
+CREATE VIEW TOP_5_SALES AS
+SELECT
+	customer_id,
+    SUM(total_sale) as Total_Sales
+FROM retail_sales
+GROUP BY customer_id
+ORDER BY Total_Sales DESC
+LIMIT 5;
 
-<h3>📉 Bottom 10 Shows</h3>
+SELECT * FROM TOP_5_SALES;
+```
 
-<ul>
-  <li>
-    <b>SQL Query:</b>
-    <pre><code>
-CREATE VIEW BOTTOM10_SHOWS AS 
-SELECT 
-  TITLE,
-  TYPE,
-  DESCRIPTION,
-  RELEASE_YEAR,
-  IMDB_SCORE
-FROM netflix_titles
-WHERE TYPE = 'SHOW' 
-  AND IMDB_SCORE IS NOT NULL
-ORDER BY IMDB_SCORE ASC
-LIMIT 10;
+9. **Write a SQL query to find the number of unique customers who purchased items from each category.**:
+```sql
+SELECT
+	Category,
+    COUNT(DISTINCT(customer_id)) AS unique_count
+FROM retail_sales
+GROUP BY CATEGORY;
+```
 
-SELECT * FROM BOTTOM10_SHOWS;
-    </code></pre>
-  </li>
+10. **Write a SQL query to create each shift and number of orders (Example Morning <12, Afternoon Between 12 & 17, Evening >17)**:
+```sql
 
-  <li>
-    <b>Result:</b>
-    <br><br>
-    <p align="center">
-      <img src="https://github.com/HeyChamp29/Netflix-Shows-and-Movies-SQL/blob/main/Question4.png" width="700">
-    </p>
-  </li>
-</ul>
+WITH hourly_sale AS 
+(
+	SELECT *,
+		CASE
+			WHEN EXTRACT(HOUR FROM sale_time) < 12 THEN 'Morning'
+            WHEN EXTRACT(HOUR FROM sale_time) BETWEEN 12 AND 17 THEN 'Afternoon'
+            ELSE 'Evening'
+		END AS shift
+	FROM retail_sales
+    )
+    SELECT
+		shift,
+        COUNT(*) as Total_Orders
+	FROM hourly_sale
+    GROUP BY shift;
+```
 
-<p>The IMDb score serves as a trusted benchmark for gauging the popularity, impact, and overall quality of movies and shows. The top 10 titles in this analysis reflect content that resonated strongly with audiences — receiving widespread praise for storytelling, performances, and production value. These high-performing titles represent the kind of content that keeps viewers engaged and enhances Netflix’s reputation for premium entertainment. Conversely, the bottom 10 titles reveal the less successful side of the spectrum. Their lower IMDb scores suggest weaker audience reception, which could be attributed to shortcomings in direction, narrative strength, or viewer relatability. Analyzing both extremes allows for a balanced understanding of audience sentiment. It not only identifies the standout titles that drive engagement but also highlights areas where Netflix can refine its content strategy — such as improving curation, promoting diverse genres, or re-evaluating underperforming productions. Ultimately, this comparison provides a meaningful glimpse into what viewers truly value and how their preferences shape the success of Netflix’s catalog.</p>
+## Findings
 
+- **Customer Demographics**: The dataset includes customers from various age groups, with sales distributed across different categories such as Clothing and Beauty.
+- **High-Value Transactions**: Several transactions had a total sale amount greater than 1000, indicating premium purchases.
+- **Sales Trends**: Monthly analysis shows variations in sales, helping identify peak seasons.
+- **Customer Insights**: The analysis identifies the top-spending customers and the most popular product categories.
 
-<h2>📅 2. How Many Movies and Shows Fall in Each Decade in Netflix's Library?</h2>
+## Reports
 
-<ul>
-  <li>
-    <b>SQL Query:</b>
-    <pre><code>
-CREATE VIEW DECADE_WISE_SELECTION AS
-SELECT 
-  CONCAT(FLOOR(release_year/10)*10, 's') AS Decade,
-  COUNT(*) AS movies_shows_count
-FROM netflix_titles
-GROUP BY CONCAT(FLOOR(release_year/10)*10, 's')
-ORDER BY Decade;
+- **Sales Summary**: A detailed report summarizing total sales, customer demographics, and category performance.
+- **Trend Analysis**: Insights into sales trends across different months and shifts.
+- **Customer Insights**: Reports on top customers and unique customer counts per category.
 
-SELECT * FROM DECADE_WISE_SELECTION;
-    </code></pre>
-  </li>
+## Conclusion
 
-  <li>
-    <b>Result:</b>
-    <br><br>
-    <p align="center">
-      <img src="https://github.com/HeyChamp29/Netflix-Shows-and-Movies-SQL/blob/main/Question5.png" width="700">
-    </p>
-  </li>
-</ul>
+This project serves as a comprehensive introduction to SQL for data analysts, covering database setup, data cleaning, exploratory data analysis, and business-driven SQL queries. The findings from this project can help drive business decisions by understanding sales patterns, customer behavior, and product performance.
 
-<p>
-  The decade-wise breakdown provides an overview of how Netflix’s library has evolved through time. 
-  The data reveals that the majority of content comes from the 2010s and 2020s, reflecting Netflix’s 
-  focus on acquiring and producing newer titles to match current audience interests. 
-  Older decades, while contributing fewer titles, represent classic additions that diversify the platform’s offerings. 
-  This distribution emphasizes Netflix’s strategic balance between modern content creation and maintaining a 
-  nostalgic connection through select older releases.
-</p>
+## How to Use
 
-<h2>🔞 3. How Did Age-Certifications Impact the Dataset?</h2> <ul> <li> <b>SQL Query:</b> <pre><code> CREATE VIEW AGE_CERTIFICATION_IMPACT AS SELECT DISTINCT age_certification, ROUND(AVG(imdb_score), 2) AS imdb_score, ROUND(AVG(tmdb_score), 2) AS tmdb_score FROM netflix_titles GROUP BY age_certification ORDER BY imdb_score DESC;
-SELECT * FROM AGE_CERTIFICATION_IMPACT;
-</code></pre>
-</li> <li> <b>Result:</b> <br><br> <p align="center"> <img src="https://github.com/HeyChamp29/Netflix-Shows-and-Movies-SQL/blob/main/Question6.png" width="700"> </p> </li> </ul> <p> Age certifications are a crucial aspect of content classification, designed to guide viewers on age-appropriate content and help platforms like Netflix manage audience segmentation effectively. This analysis explores how different age-certification categories correlate with audience ratings, using both IMDb and TMDB scores as indicators of content reception. </p> <p> From the results, we observe that titles rated for more mature audiences (such as <code>R</code> or <code>TV-MA</code>) tend to score higher on average than those intended for general or younger audiences (like <code>PG</code> or <code>TV-Y</code>). This trend suggests that mature content may offer more complex narratives, deeper character development, or edgier themes that resonate strongly with audiences and critics alike. </p> <p> Conversely, content designed for children or family viewing, while important for platform diversity, tends to receive slightly lower ratings—possibly due to simpler plots or niche appeal. These insights help Netflix understand the performance of content across different viewer age groups and can inform decisions about where to invest in original programming, how to optimize content recommendations, and how to balance offerings for various audience segments. </p>
-<h2>🎭 4. Which Genres Are the Most Common?</h2> <ul> <li> <b>SQL Query (Most Common Genres for Shows):</b> <pre><code> CREATE VIEW MOST_SHOWS_BY_GENRES AS SELECT genres, COUNT(*) AS most_movies FROM netflix_titles WHERE type = 'SHOW' AND genres IS NOT NULL GROUP BY genres ORDER BY most_movies DESC;
-SELECT * FROM MOST_SHOWS_BY_GENRES;
-</code></pre>
-</li> <li> <b>Result:</b><br><br> <p align="center"> <img src="https://github.com/HeyChamp29/Netflix-Shows-and-Movies-SQL/blob/main/Question13.png" width="700"> </p> </li> </ul> <p> Genre analysis helps Netflix understand what types of content dominate its library and which ones resonate the most with its audience. In this query, we specifically focus on <strong>shows</strong> and group them by their genre to find the most frequently occurring categories. </p> <p> From the results, it's evident that genres such as <strong>Drama</strong>, <strong>Comedy</strong>, and <strong>Reality</strong> top the list, reflecting a strong global appetite for emotionally engaging stories, humor, and unscripted entertainment. These popular genres likely receive higher production budgets and more prominent placements on the platform. </p> <p> Understanding genre trends enables Netflix to tailor its acquisition and production strategies. It can help in identifying oversaturated areas or underrepresented niches, ultimately supporting smarter content investment and more personalized viewer recommendations. </p> <br> <ul> <li> <b>SQL Query (Top 3 Most Common Genres for Movies):</b> <pre><code> CREATE VIEW TOP3_GENRE AS SELECT genres, COUNT(*) AS count_genres FROM netflix_titles WHERE type = 'MOVIE' GROUP BY genres ORDER BY count_genres DESC LIMIT 3;
-SELECT * FROM TOP3_GENRE;
-</code></pre>
-</li> <li> <b>Result:</b><br><br> <p align="center"> <img src="https://github.com/HeyChamp29/Netflix-Shows-and-Movies-SQL/blob/main/Question18.png" width="700"> </p> </li> </ul> <p> While the previous query focused on shows, this one targets <strong>movies</strong> to determine which genres are most prevalent in that category. As seen in the results, genres like <strong>Drama</strong>, <strong>Comedy</strong>, and <strong>Documentary</strong> lead the way — genres that often appeal to wide audiences and are versatile in storytelling. </p> <p> This insight supports Netflix’s efforts to optimize their movie catalog based on viewer demand, helping inform decisions around licensing deals and original film production. </p>
-
-<h2>🧠 Conclusion</h2> <br> <p> This Netflix Shows and Movies SQL project offered a comprehensive deep dive into the platform’s vast content library using structured data analysis. By leveraging SQL, we were able to uncover meaningful patterns related to audience preferences, content ratings, genre distributions, and more. The exploration of top- and bottom-ranked titles through IMDb scores highlighted how certain shows and movies consistently outperform others in terms of viewer reception. Decade-wise content analysis revealed Netflix's clear focus on modern and fresh titles, while still maintaining a touch of older, classic works to cater to a broad spectrum of audiences. </p> <p> Additionally, examining age certifications and genre popularity provided valuable insights into how content is categorized and consumed across different viewer segments. High ratings in mature-rated titles suggest a demand for complex, adult storytelling, while the dominance of genres like Drama and Comedy reflects global tastes. Such findings can guide Netflix in refining their content strategy, optimizing user recommendations, and investing wisely in future productions. This data-driven approach empowers stakeholders to make smarter decisions, ensuring that the platform continues to grow as a leader in the entertainment industry. </p>
-
-
-
-
-
+1. **Clone the Repository**: Clone this project repository from GitHub.
+2. **Set Up the Database**: Run the SQL scripts provided in the `database_setup.sql` file to create and populate the database.
+3. **Run the Queries**: Use the SQL queries provided in the `analysis_queries.sql` file to perform your analysis.
+4. **Explore and Modify**: Feel free to modify the queries to explore different aspects of the dataset or answer additional business questions.
