@@ -28,7 +28,7 @@ This project demonstrates the implementation of a Library Management System usin
 ```sql
 -- Creating Database
 
-DROP DATABASE Library_Mngmt_System;
+DROP DATABASE IF EXISTS Library_Mngmt_System;
 
 Create Database Library_Mngmt_System;
 
