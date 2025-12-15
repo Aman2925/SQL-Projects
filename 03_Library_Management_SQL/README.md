@@ -325,3 +325,8 @@ This project demonstrates the application of SQL skills in creating and managing
 ## How to Use
 
 1. Clone the Repository: Clone this repository to your local machine.
+
+```bash
+git clone https://github.com/HeyChamp29/SQL-Projects.git
+```
+
