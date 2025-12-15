@@ -23,12 +23,14 @@ SQL-Projects/
 │   ├── retail_sales.sql       # SQL scripts
 │   └── README.md
 │
-├── 03_Coffee_Shop_SQL
-│   ├── data/                  # CSV datasets: orders, items, staff, etc.
-│   ├── database_setup.sql     # Schema + Table creation
-│   ├── README.md              # Project documentation
+├── 03_Library_Management_SQL
+│   ├── data/                  # CSV datasets (books, members, issues, returns)
+│   ├── database_setup.sql     # Database & table creation scripts
+│   ├── library_queries.sql    # Business & analytical SQL queries
+│   └── README.md              # Project documentation
 │
 └── README.md (this file)
+
 ```
 
 ---
@@ -79,14 +81,13 @@ Perfect for:
 
 ### **3️⃣ Coffee Shop SQL Case Study**
 
-* Multi-table relational schema
-* Staff scheduling (rota), shifts, and store info
-* Orders, recipes, items, stock, ingredients
-* Sales and operational insights
-* Fully structured SQL + CSV dataset
+* End-to-end relational database design
+* Branch, employees, books, members management
+* Book issue & return tracking
+* Business queries for library operations
+* Referential integrity using foreign keys
 
-✔ Skills used: Schema creation, Joins, Business Analysis Queries
-
+✔ Skills used: Schema Design, Primary & Foreign Keys, Joins, Constraints, Data Validation, Analytical Queries
 ---
 
 ## 🛠 **Technologies Used**
@@ -105,12 +106,12 @@ Perfect for:
    ```bash
    git clone https://github.com/<your-username>/SQL-Projects.git
    ```
-2. Open any project folder (e.g., `03_Coffee_Shop_SQL/`).
+2. Open any project folder (e.g., `03_Library_Management_SQL/`).
 3. Start with:
 
    * `database_setup.sql` → creates tables & schema
    * `data/*.csv` → load sample datasets
-   * `project.sql` → run the analysis queries
+   * `library_queries.sql` → run analytical & business queries
 4. View the READMEs inside each folder for detailed explanations.
 
 ---
