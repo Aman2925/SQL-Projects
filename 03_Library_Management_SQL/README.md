@@ -1,17 +1,9 @@
 # 📚 Library Management System – SQL Project
 
-An end-to-end SQL project focused on designing and managing a Library Management System using relational databases.
+## Project Overview
 
-## 📌 Features
-- Branch, employees, books, and members management
-- Book issue and return tracking
-- Foreign key relationships and constraints
-- CSV data loading using LOAD DATA INFILE
-- Business-oriented analytical queries
+**Project Title**: Library Management System  
+**Level**: Intermediate  
+**Database**: `Library_Mngmt_System_db`
 
-## 🛠 Technologies
-- MySQL
-- SQL Workbench
-- CSV datasets
-
-## 📂 Project Structure
+This project demonstrates the implementation of a Library Management System using SQL. It includes creating and managing tables, performing CRUD operations, and executing advanced SQL queries. The goal is to showcase skills in database design, manipulation, and querying.
