@@ -15,3 +15,11 @@ This project demonstrates the implementation of a Library Management System usin
 2. **CRUD Operations**: Perform Create, Read, Update, and Delete operations on the data.
 3. **CTAS (Create Table As Select)**: Utilize CTAS to create new tables based on query results.
 4. **Advanced SQL Queries**: Develop complex queries to analyze and retrieve specific data.
+
+
+### 1. Database Setup
+
+
+
+- **Database Creation**: Created a database named `Library_Mngmt_System_db`.
+- **Table Creation**: Created tables for branches, employees, members, books, issued status, and return status. Each table includes relevant columns and relationships.
