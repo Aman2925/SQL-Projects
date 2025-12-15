@@ -310,3 +310,6 @@ WHERE rs.return_id IS NULL;
 ```
 
 ## Advanced SQL Operations
+
+
+## Reports
