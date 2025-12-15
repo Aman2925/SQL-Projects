@@ -21,6 +21,8 @@ This project demonstrates the implementation of a Library Management System usin
 
 ### 1. Database Setup
 
+![Library ER Diagram](ER-Model.png)
+
 
 
 - **Database Creation**: Created a database named `Library_Mngmt_System_db`.
