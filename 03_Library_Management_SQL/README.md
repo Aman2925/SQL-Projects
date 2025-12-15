@@ -155,3 +155,30 @@ WHERE member_id = 'C101';
 
 SELECT * FROM Library_Mngmt_System.members;
 ```
+
+
+**Task 3: Delete a Record from the Issued Status Table**
+
+-- Objective: Delete the record with issued_id = 'IS121' from the issued_status table.
+
+```sql
+
+SELECT * FROM Library_Mngmt_System.issued_status
+WHERE issued_id = 'IS121';
+
+DELETE FROM Library_Mngmt_System.issued_status
+WHERE issued_id = 'IS121';
+
+SELECT * FROM Library_Mngmt_System.issued_status;
+
+```
+
+**Task 4: Retrieve All Books Issued by a Specific Employee**
+
+-- Objective: Select all books issued by the employee with emp_id = 'E101'.
+
+```sql
+SELECT * FROM Library_Mngmt_System.issued_status
+WHERE issued_emp_id = 'E101';
+
+```
