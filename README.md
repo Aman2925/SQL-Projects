@@ -79,7 +79,7 @@ Perfect for:
 
 ---
 
-### **3️⃣ Coffee Shop SQL Case Study**
+### **3️⃣ Library Management System SQL Project**
 
 * End-to-end relational database design
 * Branch, employees, books, members management
