@@ -330,3 +330,19 @@ This project demonstrates the application of SQL skills in creating and managing
 git clone https://github.com/HeyChamp29/SQL-Projects.git
 ```
 
+2.Navigate to the Library Management project:
+
+```bash
+cd SQL-Projects/03_Library_Management_SQL
+
+```
+
+3.Set up the database:
+Run database_setup.sql to create the database and tables.
+
+4.Load data:
+Import CSV files from the data/ folder using LOAD DATA INFILE or your preferred method.
+
+5.Run analysis:
+Execute queries from library_queries.sql to explore and analyze the data.
+
