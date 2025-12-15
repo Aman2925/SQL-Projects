@@ -130,3 +130,17 @@ REFERENCES employees(emp_id);
 - **Read**: Retrieved and displayed data from various tables.
 - **Update**: Updated records in the `employees` table.
 - **Delete**: Removed records from the `members` table as needed.
+
+
+**Task 1. Create a New Book Record**
+-- "978-1-60129-456-2', 'To Kill a Mockingbird', 'Classic', 6.00, 'yes', 'Harper Lee', 'J.B. Lippincott & Co.')"
+
+```sql
+INSERT INTO Library_Mngmt_System.Books
+(isbn, book_title, category, rental_price, status, author, publisher)
+VALUES
+(
+	'978-1-60129-456-2','To Kill a Mockingbird','Classic',6.00,'yes', 'Harper Lee', 'J.B. Lippincott & Co.'
+);
+SELECT * FROM Library_Mngmt_System.books;
+```
