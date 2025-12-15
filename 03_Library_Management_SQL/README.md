@@ -144,3 +144,14 @@ VALUES
 );
 SELECT * FROM Library_Mngmt_System.books;
 ```
+
+**Task 2: Update an Existing Member's Address**
+
+```sql
+
+UPDATE Library_Mngmt_System.members
+SET member_address = '125 Main St'
+WHERE member_id = 'C101';
+
+SELECT * FROM Library_Mngmt_System.members;
+```
