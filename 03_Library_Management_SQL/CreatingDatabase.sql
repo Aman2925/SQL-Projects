@@ -96,6 +96,18 @@ FOREIGN KEY (issued_emp_id)
 REFERENCES employees(emp_id);
 
 
+ALTER TABLE return_status
+ADD CONSTRAINT fk_return 
+FOREIGN KEY (issued_id)
+REFERENCES issued_status(issued_id);
+
+
+ 
+ALTER TABLE employees
+ADD CONSTRAINT fk_branch
+FOREIGN KEY (branch_id)
+REFERENCES Branch(branch_id);
+
 -- Project TASK
 
 
