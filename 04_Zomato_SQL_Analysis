@@ -1,1 +1,135 @@
+Below is a **recruiter-friendly, clean, and professional README** for your **Zomato SQL Analysis Project**.
+It is concise, business-oriented, and highlights **impact + skills**, not just queries.
+You can **directly paste this into `04_Zomato_SQL_Analysis/README.md`**.
+
+---
+
+# 🍽️ Zomato SQL Analysis Project
+
+## 📌 Project Overview
+
+This project focuses on performing **end-to-end SQL analysis** on a food delivery platform dataset inspired by **Zomato**. The objective is to extract meaningful business insights related to **orders, revenue, customers, restaurants, and rider performance** using structured SQL queries.
+
+The project demonstrates strong SQL fundamentals along with **real-world problem handling**, including time-based analysis and performance evaluation.
+
+---
+
+## 📊 Business Objectives
+
+* Analyze **order and revenue trends** across cities and restaurants
+* Understand **customer ordering behavior and frequency**
+* Evaluate **rider efficiency** using average delivery time metrics
+* Identify **peak ordering periods** and high-performing locations
+* Answer business-driven analytical questions using SQL
+
+---
+
+## 🗂️ Dataset Description
+
+The dataset consists of multiple relational tables simulating a food delivery ecosystem:
+
+* `customers` – customer details and identifiers
+* `restaurants` – restaurant information and city mapping
+* `orders` – order transactions with date and time details
+* `deliveries` – delivery records including rider and delivery time
+* `riders` – delivery partner information
+
+The schema is designed using **primary and foreign keys** to represent real-world relationships.
+
+---
+
+## 🧠 Key Analysis Performed
+
+* City-wise and restaurant-wise **total revenue analysis**
+* Monthly and yearly **sales trend comparison**
+* Order frequency analysis by **day of the week**
+* Customer ordering pattern and repeat behavior analysis
+* **Rider efficiency evaluation** using average delivery times
+* Identification of fastest and slowest delivery partners
+
+Special attention was given to **time-based challenges**, including:
+
+* AM/PM time format conversion
+* Handling **midnight crossover** cases in delivery time calculations
+
+---
+
+## 🛠️ SQL Concepts Used
+
+* INNER & LEFT JOINs
+* GROUP BY, HAVING
+* Subqueries
+* Common Table Expressions (CTEs)
+* Window Functions (`RANK`, `LAG`, `AVG`)
+* Date & Time Functions
+* String-to-Time conversion
+* Analytical and ranking queries
+
+---
+
+## 📁 Project Structure
+
+```
+04_Zomato_SQL_Analysis/
+├── data/           # Database schema & sample data
+├── queries/        # Basic, intermediate & advanced SQL queries
+├── images/         # ER diagram & query output screenshots
+└── README.md       # Project documentation
+```
+
+---
+
+## 🧰 Tools Used
+
+* **MySQL**
+* **SQL Workbench**
+* **GitHub**
+
+---
+
+## ✅ Key Outcomes
+
+* Strengthened ability to solve **real-world SQL analytics problems**
+* Improved understanding of **time-based data handling**
+* Practical experience with **complex joins and window functions**
+* Developed business-oriented thinking while writing SQL queries
+
+---
+
+## 📌 Why This Project Matters
+
+This project reflects how SQL is used in real business scenarios to:
+
+* Answer operational questions
+* Measure performance metrics
+* Support data-driven decision making
+
+It is suitable for **data analyst roles**, **SQL interviews**, and **portfolio evaluation**.
+
+---
+
+## 👤 Author
+
+**Aman Shah**
+📍 Mumbai, India
+🎓 B.Tech Engineering Student
+💼 Aspiring Data Analyst
+
+🔗 GitHub: [https://github.com/HeyChamp29](https://github.com/HeyChamp29)
+🔗 LinkedIn: [https://www.linkedin.com/in/aman-shah-546775255/](https://www.linkedin.com/in/aman-shah-546775255/)
+
+---
+
+### 🔥 Final Tip
+
+This README is **already recruiter-ready**.
+Do **not over-explain** further — clarity and structure matter more.
+
+If you want, next I can:
+
+* Optimize this for **ATS scanning**
+* Write **resume bullets** from this project
+* Review **query organization** for maximum impact
+
+Just tell me what’s next.
 
