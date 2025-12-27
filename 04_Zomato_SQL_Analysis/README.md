@@ -1,5 +1,3 @@
----
-
 # 🍽️ Zomato Food Delivery Analysis – SQL Project
 
 ## Project Overview
