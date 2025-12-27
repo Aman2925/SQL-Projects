@@ -151,7 +151,7 @@ Perfect for:
 * 🎓 B.Tech Engineering Student
 * 📍 Mumbai, India
 * 💼 Aspiring Data Analyst
-* 🔗 GitHub: [https://github.com/HeyChamp29](https://github.com/HeyChamp29)
+* 🔗 GitHub: [https://github.com/Aman2925]
 * 🔗 LinkedIn: [https://www.linkedin.com/in/aman-shah-546775255/](https://www.linkedin.com/in/aman-shah-546775255/)
 
 ---
