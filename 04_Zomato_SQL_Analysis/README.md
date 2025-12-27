@@ -193,10 +193,39 @@ WHERE rnk <=5;
 
 ### 2️⃣ Popular Time Slots Analysis
 
-Analyzed **peak ordering hours** using:
+```sql
+SELECT 
+    CASE 
+        WHEN EXTRACT(HOUR FROM order_time) BETWEEN 0 AND 1 THEN '00:00 - 02:00'
+        WHEN EXTRACT(HOUR FROM order_time) BETWEEN 2 AND 3 THEN '02:00 - 04:00'
+        WHEN EXTRACT(HOUR FROM order_time) BETWEEN 4 AND 5 THEN '04:00 - 06:00'
+        WHEN EXTRACT(HOUR FROM order_time) BETWEEN 6 AND 7 THEN '06:00 - 08:00'
+        WHEN EXTRACT(HOUR FROM order_time) BETWEEN 8 AND 9 THEN '08:00 - 10:00'
+        WHEN EXTRACT(HOUR FROM order_time) BETWEEN 10 AND 11 THEN '10:00 - 12:00'
+        WHEN EXTRACT(HOUR FROM order_time) BETWEEN 12 AND 13 THEN '12:00 - 14:00'
+        WHEN EXTRACT(HOUR FROM order_time) BETWEEN 14 AND 15 THEN '14:00 - 16:00'
+        WHEN EXTRACT(HOUR FROM order_time) BETWEEN 16 AND 17 THEN '16:00 - 18:00'
+        WHEN EXTRACT(HOUR FROM order_time) BETWEEN 18 AND 19 THEN '18:00 - 20:00'
+        WHEN EXTRACT(HOUR FROM order_time) BETWEEN 20 AND 21 THEN '20:00 - 22:00'
+        WHEN EXTRACT(HOUR FROM order_time) BETWEEN 22 AND 23 THEN '22:00 - 00:00'
+    END AS time_slot,
+    COUNT(order_id) AS order_count
+FROM zomato_db.orders
+GROUP BY time_slot
+ORDER BY order_count DESC;
 
-* 2-hour time slot bucketing
-* Multiple approaches (`CASE`, mathematical grouping)
+
+-- Approach 2
+
+SELECT 
+    FLOOR(EXTRACT(HOUR FROM order_time)/2) * 2 AS start_time,
+    FLOOR(EXTRACT(HOUR FROM order_time)/2) * 2 + 2 AS end_time,
+    COUNT(order_id) AS order_count
+FROM zomato_db.orders
+GROUP BY start_time, end_time
+ORDER BY order_count DESC;
+
+```
 
 ---
 
