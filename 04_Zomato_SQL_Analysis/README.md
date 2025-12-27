@@ -316,95 +316,445 @@ WHERE rnk = 1;
 ---
 
 ### 6️⃣ Most Popular Dish by City
+**Identify the most popular dish in each city based on the number of orders**
 
-Determined the **most ordered dish in each city**, showcasing city-level food preferences.
+```sql
+
+WITH city_wise_dish_ranking
+AS
+(
+	SELECT 
+		r.city,
+		o.order_item,
+		COUNT(o.order_id) as No_of_orders,
+		RANK() OVER(PARTITION BY r.city ORDER BY COUNT(o.order_id) DESC) AS rnk
+	FROM 
+		zomato_db.restaurants AS r
+	JOIN 
+		zomato_db.orders AS o
+	ON
+		r.restaurant_id = o.restaurant_id
+	GROUP BY 
+		r.city,
+		o.order_item
+)
+
+SELECT 
+	city,
+    order_item
+FROM city_wise_dish_ranking
+WHERE rnk = 1;
+
+```
 
 ---
 
 ### 7️⃣ Customer Churn Analysis
 
-Identified customers who ordered in **2023 but not in 2024**, helping understand churn behavior.
+**Find customers who haven't placed an order in 2024 but did in 2023**
+
+```sql
+
+SELECT DISTINCT(customer_id) FROM zomato_db.orders
+WHERE 
+	EXTRACT(YEAR FROM order_date) = 2023
+			AND
+	customer_id NOT IN 
+    (
+		SELECT DISTINCT(customer_id) FROM zomato_db.orders
+			WHERE 
+				EXTRACT(YEAR FROM order_date) = 2024
+	);
+
+```
 
 ---
 
 ### 8️⃣ Cancellation Rate Comparison
+ **Calculate and compare the order cancellation rate for each restaurat between the
+ current year and the previous year**
 
-Calculated and compared **order cancellation rates** for each restaurant between the current and previous year.
+```sql
+
+SELECT 
+    r.restaurant_name,
+    YEAR(o.order_date) AS order_year,
+    ROUND(
+        SUM(CASE WHEN o.order_status = 'Cancelled' THEN 1 ELSE 0 END)
+        / COUNT(*) * 100,
+        2
+    ) AS cancellation_rate
+FROM zomato_db.orders o
+JOIN zomato_db.restaurants r
+    ON o.restaurant_id = r.restaurant_id
+JOIN (
+    SELECT MAX(YEAR(order_date)) AS max_year
+    FROM zomato_db.orders
+) y
+    ON YEAR(o.order_date) IN (y.max_year, y.max_year - 1)
+GROUP BY r.restaurant_name, YEAR(o.order_date)
+ORDER BY r.restaurant_name, order_year;
+
+```
 
 ---
 
 ### 9️⃣ Rider Average Delivery Time
 
-Computed **average delivery time per rider**, handling:
+**Determine each rider's average delivery time**
 
-* AM/PM formatted time
-* Midnight crossover logic
+```sql
+SELECT 
+    d.rider_id,
+    ROUND(
+        AVG(
+            (
+                CASE
+                    -- delivery crossed midnight → add 24 hours
+                    WHEN TIME(d.delivery_time) < TIME(o.order_time)
+                    THEN TIME_TO_SEC(TIME(d.delivery_time)) + 86400
+                    ELSE TIME_TO_SEC(TIME(d.delivery_time))
+                END
+                -
+                TIME_TO_SEC(TIME(o.order_time))
+            ) / 60
+        ),
+        2
+    ) AS avg_delivery_time_minutes
+FROM zomato_db.orders o
+JOIN zomato_db.deliveries d
+    ON o.order_id = d.order_id
+WHERE d.delivery_status = 'Delivered'
+  AND d.delivery_time IS NOT NULL
+  AND o.order_time IS NOT NULL
+GROUP BY d.rider_id
+ORDER BY avg_delivery_time_minutes DESC;
+
+```
 
 ---
 
 ### 🔟 Monthly Restaurant Growth Ratio
+**Calculate each restaurant's growth ratio based on the total number of delivered orders since its
+joining**
 
-Analyzed restaurant growth trends using:
+```sql
+WITH growth_ratio
+AS
+(
+SELECT 
+	o.restaurant_id,
+    DATE_FORMAT(o.order_date, '%m-%y') AS month,
+    COUNT(o.order_id) as crnt_month_orders,
+    LAG(COUNT(o.order_id),1) OVER (PARTITION BY o.restaurant_id ORDER BY COUNT(o.order_id)) as prev_month_orders
+FROM
+	zomato_db.orders as o
+JOIN 
+	zomato_db.deliveries AS d
+ON 
+	o.order_id = d.order_id
+WHERE
+	d.delivery_status = 'Delivered'
+GROUP BY o.restaurant_id , month
+)
 
-* Monthly delivered orders
-* `LAG()` function to calculate growth percentage
+SELECT 
+	restaurant_id,
+    month,
+    crnt_month_orders,
+    prev_month_orders,
+    ROUND(
+    ((crnt_month_orders - prev_month_orders) / prev_month_orders) * 100,
+    2
+) AS growth_per
+FROM growth_ratio;
+
+```
 
 ---
 
 ### 1️⃣1️⃣ Customer Segmentation
+**-- Customer Segmentation: Segment customers into 'Gold' or 'Silver' groups based on their total spending**
+**-- compared to the average order value (AOV). If a customer's total spending exceeds the AOV**
+**-- label them as 'Gold"; otherwise, label them as 'Silver'. Write an SQL query to determine each segment's total number of orders and total revenue**
 
-Segmented customers into **Gold** and **Silver** categories based on total spending compared to overall AOV.
+```sql
+
+WITH customer_spending AS (
+    SELECT 
+        o.customer_id,
+        COUNT(o.order_id) AS total_orders,
+        SUM(o.total_amount) AS total_spent
+    FROM zomato_db.orders o
+    GROUP BY o.customer_id
+),
+overall_aov AS (
+    SELECT 
+        AVG(total_amount) AS aov
+    FROM zomato_db.orders
+)
+SELECT
+    CASE
+        WHEN cs.total_spent > oa.aov THEN 'Gold'
+        ELSE 'Silver'
+    END AS customer_segment,
+    SUM(cs.total_orders) AS total_orders,
+    SUM(cs.total_spent) AS total_revenue
+FROM customer_spending cs
+CROSS JOIN overall_aov oa
+GROUP BY customer_segment;
+
+```
 
 ---
 
 ### 1️⃣2️⃣ Rider Monthly Earnings
 
-Calculated each rider’s **monthly earnings**, assuming a commission-based payout model.
+```sql
+SELECT 
+	d.rider_id,
+    DATE_FORMAT(o.order_date,'%Y-%m') as month,
+    ROUND(SUM(o.total_amount * 0.08),2) AS monthly_earnings
+FROM zomato_db.orders AS o
+JOIN zomato_db.deliveries AS d
+ON o.order_id = d.order_id
+WHERE d.delivery_status = 'Delivered'
+GROUP BY d.rider_id,month
+ORDER BY d.rider_id,month;
+
+```
 
 ---
 
 ### 1️⃣3️⃣ Rider Ratings Analysis
 
-Assigned **3-star, 4-star, and 5-star ratings** to riders based on delivery time performance.
+```sql
+
+WITH delivery_rating AS (
+    SELECT
+        d.rider_id,
+        (
+            TIME_TO_SEC(STR_TO_DATE(d.delivery_time, '%h:%i:%s %p'))
+            -
+            TIME_TO_SEC(STR_TO_DATE(o.order_time, '%H:%i:%s'))
+        ) / 60 AS delivery_minutes
+    FROM zomato_db.orders o
+    JOIN zomato_db.deliveries d
+        ON o.order_id = d.order_id
+    WHERE d.delivery_status = 'Delivered'
+)
+SELECT
+    rider_id,
+    SUM(CASE WHEN delivery_minutes < 15 THEN 1 ELSE 0 END) AS five_star_count,
+    SUM(CASE WHEN delivery_minutes BETWEEN 15 AND 20 THEN 1 ELSE 0 END) AS four_star_count,
+    SUM(CASE WHEN delivery_minutes > 20 THEN 1 ELSE 0 END) AS three_star_count
+FROM delivery_rating
+GROUP BY rider_id
+ORDER BY rider_id;
+
+```
 
 ---
 
 ### 1️⃣4️⃣ Order Frequency by Day
 
-Identified the **peak ordering day for each restaurant** using ranking logic.
+```sql
+
+WITH day_as_freq
+AS
+(
+	SELECT 
+		restaurant_id,
+        DAYNAME(order_date) AS day_name,
+        COUNT(order_id) as frequency 
+	FROM zomato_db.orders
+    GROUP BY 
+		 restaurant_id,
+         DAYNAME(order_date)
+),
+ranked_days AS (
+		SELECT 
+			*,
+			RANK() OVER (
+			 PARTITION BY restaurant_id
+             ORDER BY frequency DESC
+			) AS rnk
+		FROM day_as_freq
+	)
+		SELECT 
+			restaurant_id,
+            day_name,
+            frequency
+		FROM ranked_days
+        WHERE rnk = 1;
+
+```
 
 ---
 
 ### 1️⃣5️⃣ Customer Lifetime Value (CLV)
 
-Calculated **total revenue generated by each customer** across all orders.
+```sql
+
+	SELECT 
+		c.customer_name,
+		o.customer_id,
+        SUM(total_amount) as CLV
+	FROM 
+		zomato_db.orders AS o
+    JOIN
+		zomato_db.customers AS c
+	ON
+		c.customer_id = o.customer_id
+    GROUP BY o.customer_id,
+			 c.customer_name
+	ORDER BY CLV;
+
+```
 
 ---
 
 ### 1️⃣6️⃣ Monthly Sales Trend Analysis
 
-Compared **month-over-month sales performance** using:
+```sql
 
-* Aggregation
-* `LAG()` for trend comparison
+WITH monthly_sales 
+AS 
+(
+	SELECT 
+		YEAR(order_date) AS YEAR,
+        MONTH(order_date) AS Month_Num,
+        MONTHNAME(order_date) as MonthName,
+        SUM(total_amount) AS Sales
+	FROM zomato_db.orders
+    GROUP BY 
+		YEAR(order_date),
+        MONTH(order_date),
+        MONTHNAME(order_date)
+)
+	SELECT 
+		YEAR,
+        MonthName,
+        SALES,
+        LAG(SALES) OVER (
+			ORDER BY YEAR,Month_Num
+		) AS prev_month_sales,
+        SALES - LAG(SALES) OVER (
+			ORDER BY YEAR,MONTH_NUM
+		) AS sales_change
+		FROM Monthly_Sales
+        GROUP BY Month_Num,YEAR,MonthNAME;
+
+```
+
+
 
 ---
 
 ### 1️⃣7️⃣ Rider Efficiency Evaluation
 
-Identified **fastest and slowest riders** based on average delivery times with proper midnight handling.
+```sql
+
+WITH rider_avg AS (
+    SELECT 
+        d.rider_id,
+        ROUND(
+            AVG(
+                CASE 
+                    -- If delivery time is past midnight
+                    WHEN STR_TO_DATE(TRIM(d.delivery_time), '%h:%i:%s %p')
+                         < STR_TO_DATE(TRIM(o.order_time), '%h:%i:%s %p')
+                    THEN TIMESTAMPDIFF(
+                            MINUTE,
+                            STR_TO_DATE(TRIM(o.order_time), '%h:%i:%s %p'),
+                            STR_TO_DATE(TRIM(d.delivery_time), '%h:%i:%s %p') 
+                            + INTERVAL 1 DAY
+                         )
+                    -- Normal same-day delivery
+                    ELSE TIMESTAMPDIFF(
+                            MINUTE,
+                            STR_TO_DATE(TRIM(o.order_time), '%h:%i:%s %p'),
+                            STR_TO_DATE(TRIM(d.delivery_time), '%h:%i:%s %p')
+                         )
+                END
+            ),
+            2
+        ) AS avg_delivery_time_minutes
+    FROM zomato_db.orders o
+    JOIN zomato_db.deliveries d
+        ON o.order_id = d.order_id
+    WHERE d.delivery_status = 'Delivered'
+    GROUP BY d.rider_id
+),
+riders_time
+AS
+(
+	SELECT
+    rider_id,
+    avg_delivery_time_minutes AS Avg_Time
+FROM rider_avg
+GROUP BY rider_id
+)
+
+SELECT
+	MIN(Avg_Time) AS Min_Avg,
+    MAX(Avg_Time) AS Max_Avg
+FROM riders_time;
+
+```
 
 ---
 
 ### 1️⃣8️⃣ Seasonal Item Popularity
 
-Analyzed **seasonal demand patterns** (Summer, Rainy, Winter) for different food items.
+```sql
+
+WITH Seasons
+AS
+(
+SELECT 
+	*,
+    EXTRACT(MONTH FROM order_date) AS Month,
+    CASE 
+		WHEN EXTRACT(MONTH FROM order_date) BETWEEN 3 AND 6 THEN 'SUMMER'
+        WHEN EXTRACT(MONTH FROM order_date) BETWEEN 7 AND 10 THEN 'RAINY'
+        ELSE 'WINTER'
+	END AS SEASONS
+FROM zomato_db.orders
+)
+
+SELECT 
+	order_item,
+    COUNT(order_id) AS FREQUENCIES,
+    Seasons
+FROM SEASONS
+GROUP BY order_item,Seasons;
+
+```
 
 ---
 
 ### 1️⃣9️⃣ City Revenue Ranking (2023)
 
-Ranked cities based on **total revenue generated in 2023** using CTEs and window functions.
+```sql
+
+WITH city_revenue AS (
+    SELECT
+        r.city,
+        SUM(o.total_amount) AS total_revenue
+    FROM zomato_db.orders o
+    JOIN zomato_db.restaurants r
+        ON o.restaurant_id = r.restaurant_id
+    WHERE YEAR(o.order_date) = 2023
+    GROUP BY r.city
+)
+SELECT
+    city,
+    total_revenue,
+    RANK() OVER (ORDER BY total_revenue DESC) AS rnk
+FROM city_revenue;
+
+```
 
 ---
 
