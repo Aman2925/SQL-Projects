@@ -2,14 +2,17 @@
 
 ## Project Overview
 
-**Project Title**: Zomato Food Delivery Analysis
-**Level**: Advanced
+**Project Title**: Zomato Food Delivery Analysis   
+**Level**: Intermediate  
 **Database**: `zomato_db`
 
 This project demonstrates an **end-to-end SQL analytics case study** on a food delivery platform inspired by Zomato.
 The analysis focuses on **customer behavior, restaurant performance, revenue trends, delivery efficiency, and time-based analytics**, solving real-world business problems using SQL.
 
 The project showcases **advanced SQL querying, window functions, CTEs, time handling, and analytical thinking** commonly required in data analyst roles.
+
+![Zomato Food Delivery Project](Zomato_Logo.png)
+
 
 ---
 
