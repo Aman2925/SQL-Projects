@@ -11,7 +11,8 @@ The analysis focuses on **customer behavior, restaurant performance, revenue tre
 
 The project showcases **advanced SQL querying, window functions, CTEs, time handling, and analytical thinking** commonly required in data analyst roles.
 
-![Zomato Food Delivery Project](Zomato_Logo.png)
+![Zomato Food Delivery Project](zomato-social.jpg)
+
 
 
 ---
