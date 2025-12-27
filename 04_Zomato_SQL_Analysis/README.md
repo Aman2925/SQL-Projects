@@ -526,12 +526,12 @@ ORDER BY d.rider_id,month;
 ---
 
 ### 1️⃣3️⃣ Rider Ratings Analysis
-**-- Find the number of 5-star, 4-star,
+**Find the number of 5-star, 4-star,
 and 3-star ratings each rider has.
--- riders receive this rating based on delivery time.
--- If orders are delivered less than 15 minutes of order received time the rider get 5
--- if they deliver 15 and 20 minute they get 4 star rating
--- if they deliver after 20 minute they get 3 star rating.
+riders receive this rating based on delivery time.
+If orders are delivered less than 15 minutes of order received time the rider get 5
+if they deliver 15 and 20 minute they get 4 star rating
+if they deliver after 20 minute they get 3 star rating.
 star
 rating**
 
