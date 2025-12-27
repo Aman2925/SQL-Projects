@@ -1,81 +1,310 @@
 ---
 
-# 🍽️ Zomato SQL Analysis Project
+# 🍽️ Zomato Food Delivery Analysis – SQL Project
 
-## 📌 Project Overview
+## Project Overview
 
-This project focuses on performing **end-to-end SQL analysis** on a food delivery platform dataset inspired by **Zomato**. The objective is to extract meaningful business insights related to **orders, revenue, customers, restaurants, and rider performance** using structured SQL queries.
+**Project Title**: Zomato Food Delivery Analysis
+**Level**: Advanced
+**Database**: `zomato_db`
 
-The project demonstrates strong SQL fundamentals along with **real-world problem handling**, including time-based analysis and performance evaluation.
+This project demonstrates an **end-to-end SQL analytics case study** on a food delivery platform inspired by Zomato.
+The analysis focuses on **customer behavior, restaurant performance, revenue trends, delivery efficiency, and time-based analytics**, solving real-world business problems using SQL.
 
----
-
-## 📊 Business Objectives
-
-* Analyze **order and revenue trends** across cities and restaurants
-* Understand **customer ordering behavior and frequency**
-* Evaluate **rider efficiency** using average delivery time metrics
-* Identify **peak ordering periods** and high-performing locations
-* Answer business-driven analytical questions using SQL
+The project showcases **advanced SQL querying, window functions, CTEs, time handling, and analytical thinking** commonly required in data analyst roles.
 
 ---
 
-## 🗂️ Dataset Description
+## Objectives
 
-The dataset consists of multiple relational tables simulating a food delivery ecosystem:
+1. Analyze **customer ordering behavior and spending patterns**
+2. Identify **top-performing restaurants, dishes, and cities**
+3. Evaluate **order trends across time slots, days, months, and seasons**
+4. Measure **rider efficiency and delivery performance**
+5. Handle **real-world data challenges** such as AM/PM time formats and midnight delivery cases
+6. Generate **business-driven insights** using SQL
 
-* `customers` – customer details and identifiers
+---
+
+## Database Overview
+
+The database consists of multiple relational tables representing a food delivery ecosystem:
+
+* `customers` – customer details and registration data
 * `restaurants` – restaurant information and city mapping
-* `orders` – order transactions with date and time details
-* `deliveries` – delivery records including rider and delivery time
+* `orders` – order transactions including date, time, items, and amount
+* `deliveries` – delivery details including rider and delivery time
 * `riders` – delivery partner information
 
-The schema is designed using **primary and foreign keys** to represent real-world relationships.
+Relationships are maintained using **primary and foreign keys**, simulating real production-level data design.
 
 ---
 
-## 🧠 Key Analysis Performed
+## Database Setup
 
-* City-wise and restaurant-wise **total revenue analysis**
-* Monthly and yearly **sales trend comparison**
-* Order frequency analysis by **day of the week**
-* Customer ordering pattern and repeat behavior analysis
-* **Rider efficiency evaluation** using average delivery times
-* Identification of fastest and slowest delivery partners
+- ** Database Creation**: Created a database named `zomato_db`.
+- **Table Creation**: Created tables for customers, restaurants, orders, deliveries, and riders. Each table includes relevant columns and relationships.
 
-Special attention was given to **time-based challenges**, including:
+```sql
+-- Creating Database
 
-* AM/PM time format conversion
-* Handling **midnight crossover** cases in delivery time calculations
+-- ZOMATO DATA ANALYSIS USING SQL
+
+CREATE DATABASE zomato_db;
+
+USE zomato_db;
+
+-- CREATE Customer Table
+
+DROP TABLE IF EXISTS customers;
+CREATE TABLE customers 
+	(
+	    customer_id INT PRIMARY KEY,	
+		customer_name VARCHAR(25),	
+		reg_date DATE
+	);
+
+-- CREATE Restaurants Table
+    
+DROP TABLE IF EXISTS restaurants;
+CREATE TABLE restaurants
+	 (
+		restaurant_id INT PRIMARY KEY,
+        restaurant_name VARCHAR(55),
+        city VARCHAR(25),
+        opening_hours VARCHAR(55)
+     );
+     
+-- CREATE Orders Table
+
+
+DROP TABLE IF EXISTS orders;
+CREATE TABLE orders
+	 (
+		order_id INT PRIMARY KEY,
+        customer_id INT,     -- FK
+        restaurant_id INT,   -- FK
+        order_item VARCHAR(45),
+        order_date DATE,
+        order_time VARCHAR(55),
+        order_status VARCHAR(25),
+        total_amount FLOAT
+     );
+
+-- CREATE Riders Table
+
+DROP TABLE IF EXISTS riders;
+CREATE TABLE riders 
+	  (
+		 rider_id INT PRIMARY KEY,
+         rider_name VARCHAR(55),
+         sign_up DATE
+      );
+
+-- CREATE Deliveries Table
+
+DROP TABLE IF EXISTS deliveries;
+CREATE TABLE deliveries
+	  (
+		delivery_id INT PRIMARY KEY,
+        order_id INT, -- FK
+        delivery_status VARCHAR(25),
+        delivery_time VARCHAR(55),
+        rider_id INT -- FK
+	   );
+       
+       
+
+-- ADDING CONSTRAINTS 
+
+ALTER TABLE orders
+ADD CONSTRAINT fk_customers
+FOREIGN KEY (customer_id)
+REFERENCES customers(customer_id);
+
+
+ALTER TABLE orders
+ADD CONSTRAINT fk_restaurant
+FOREIGN KEY (restaurant_id)
+REFERENCES restaurants(restaurant_id);
+
+ALTER TABLE deliveries
+ADD CONSTRAINT fk_orders
+FOREIGN KEY (order_id)
+REFERENCES orders(order_id);
+
+ALTER TABLE deliveries
+ADD CONSTRAINT fk_riders
+FOREIGN KEY (rider_id)
+REFERENCES riders(rider_id);
+
+```
+
+
+## Data Quality Checks
+
+Before analysis, missing value checks were performed across all tables to ensure data integrity:
+
+* Customers: name, registration date
+* Restaurants: name, city, opening hours
+* Orders: customer ID, restaurant ID, item, date, time, status, amount
+* Deliveries: order ID, rider ID, delivery time, delivery status
+* Riders: rider name, signup date
+
+This step ensures **accurate and reliable analysis**.
 
 ---
 
-## 🛠️ SQL Concepts Used
+## Analysis & SQL Tasks
+
+### 1️⃣ Top Ordered Dishes by Customer
+
+Identified the **top 5 most frequently ordered dishes** by a specific customer within the last year using:
+
+* Aggregation
+* Window functions (`DENSE_RANK`)
+* Date filtering
+
+---
+
+### 2️⃣ Popular Time Slots Analysis
+
+Analyzed **peak ordering hours** using:
+
+* 2-hour time slot bucketing
+* Multiple approaches (`CASE`, mathematical grouping)
+
+---
+
+### 3️⃣ Order Value Analysis
+
+Calculated **average order value (AOV)** for customers placing more than 10 orders to identify high-value customers.
+
+---
+
+### 4️⃣ High-Value Customers
+
+Identified customers who spent **more than ₹5,000** across all orders.
+
+---
+
+### 5️⃣ Restaurant Revenue Ranking
+
+Ranked restaurants **within each city** based on total revenue from the last year using:
+
+* CTEs
+* `RANK()` window function
+
+---
+
+### 6️⃣ Most Popular Dish by City
+
+Determined the **most ordered dish in each city**, showcasing city-level food preferences.
+
+---
+
+### 7️⃣ Customer Churn Analysis
+
+Identified customers who ordered in **2023 but not in 2024**, helping understand churn behavior.
+
+---
+
+### 8️⃣ Cancellation Rate Comparison
+
+Calculated and compared **order cancellation rates** for each restaurant between the current and previous year.
+
+---
+
+### 9️⃣ Rider Average Delivery Time
+
+Computed **average delivery time per rider**, handling:
+
+* AM/PM formatted time
+* Midnight crossover logic
+
+---
+
+### 🔟 Monthly Restaurant Growth Ratio
+
+Analyzed restaurant growth trends using:
+
+* Monthly delivered orders
+* `LAG()` function to calculate growth percentage
+
+---
+
+### 1️⃣1️⃣ Customer Segmentation
+
+Segmented customers into **Gold** and **Silver** categories based on total spending compared to overall AOV.
+
+---
+
+### 1️⃣2️⃣ Rider Monthly Earnings
+
+Calculated each rider’s **monthly earnings**, assuming a commission-based payout model.
+
+---
+
+### 1️⃣3️⃣ Rider Ratings Analysis
+
+Assigned **3-star, 4-star, and 5-star ratings** to riders based on delivery time performance.
+
+---
+
+### 1️⃣4️⃣ Order Frequency by Day
+
+Identified the **peak ordering day for each restaurant** using ranking logic.
+
+---
+
+### 1️⃣5️⃣ Customer Lifetime Value (CLV)
+
+Calculated **total revenue generated by each customer** across all orders.
+
+---
+
+### 1️⃣6️⃣ Monthly Sales Trend Analysis
+
+Compared **month-over-month sales performance** using:
+
+* Aggregation
+* `LAG()` for trend comparison
+
+---
+
+### 1️⃣7️⃣ Rider Efficiency Evaluation
+
+Identified **fastest and slowest riders** based on average delivery times with proper midnight handling.
+
+---
+
+### 1️⃣8️⃣ Seasonal Item Popularity
+
+Analyzed **seasonal demand patterns** (Summer, Rainy, Winter) for different food items.
+
+---
+
+### 1️⃣9️⃣ City Revenue Ranking (2023)
+
+Ranked cities based on **total revenue generated in 2023** using CTEs and window functions.
+
+---
+
+## SQL Concepts Demonstrated
 
 * INNER & LEFT JOINs
-* GROUP BY, HAVING
+* GROUP BY & HAVING
 * Subqueries
 * Common Table Expressions (CTEs)
-* Window Functions (`RANK`, `LAG`, `AVG`)
+* Window Functions (`RANK`, `DENSE_RANK`, `LAG`)
 * Date & Time Functions
-* String-to-Time conversion
-* Analytical and ranking queries
+* String-to-Time Conversion
+* Real-world time handling (AM/PM, midnight crossover)
+* Business-driven analytical queries
 
 ---
 
-## 📁 Project Structure
-
-```
-04_Zomato_SQL_Analysis/
-├── data/           # Database schema & sample data
-├── queries/        # Basic, intermediate & advanced SQL queries
-├── images/         # ER diagram & query output screenshots
-└── README.md       # Project documentation
-```
-
----
-
-## 🧰 Tools Used
+## Tools Used
 
 * **MySQL**
 * **SQL Workbench**
@@ -83,32 +312,50 @@ Special attention was given to **time-based challenges**, including:
 
 ---
 
-## ✅ Key Outcomes
+## Key Learnings & Outcomes
 
-* Strengthened ability to solve **real-world SQL analytics problems**
-* Improved understanding of **time-based data handling**
-* Practical experience with **complex joins and window functions**
-* Developed business-oriented thinking while writing SQL queries
-
----
-
-## 📌 Why This Project Matters
-
-This project reflects how SQL is used in real business scenarios to:
-
-* Answer operational questions
-* Measure performance metrics
-* Support data-driven decision making
-
-It is suitable for **data analyst roles**, **SQL interviews**, and **portfolio evaluation**.
+* Solved **real-world SQL analytics problems**
+* Gained strong command over **time-based data handling**
+* Improved ability to translate **business questions into SQL queries**
+* Strengthened analytical thinking using **window functions and CTEs**
 
 ---
 
-## 👤 Author
+## How to Use This Project
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/HeyChamp29/SQL-Projects.git
+   ```
+
+2. Navigate to the Zomato project:
+
+   ```bash
+   cd SQL-Projects/04_Zomato_SQL_Analysis
+   ```
+
+3. Set up the database:
+
+   * Create `zomato_db`
+   * Load tables and data
+
+4. Run queries sequentially to explore analysis and insights.
+
+---
+
+## Conclusion
+
+This project demonstrates **advanced SQL proficiency** applied to a realistic food delivery business scenario.
+It reflects how SQL is used in **data analytics roles** to derive insights, evaluate performance, and support data-driven decision-making.
+
+---
+
+## Author
 
 **Aman Shah**
-📍 Mumbai, India
 🎓 B.Tech Engineering Student
+📍 Mumbai, India
 💼 Aspiring Data Analyst
 
 🔗 GitHub: [https://github.com/HeyChamp29](https://github.com/HeyChamp29)
