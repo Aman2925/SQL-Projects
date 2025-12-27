@@ -14,7 +14,7 @@ This repository includes end-to-end SQL workflows, from database creation to com
 SQL-Projects/
 │
 ├── 01_Netflix_SQL
-│   ├── Images/                # Visual outputs, ERDs, queries screenshots
+│   ├── Images/                # Visual outputs, ERDs, query screenshots
 │   ├── NetflixProj.sql        # Full SQL project script
 │   └── README.md              # Netflix project explanation
 │
@@ -29,7 +29,14 @@ SQL-Projects/
 │   ├── library_queries.sql    # Business & analytical SQL queries
 │   └── README.md              # Project documentation
 │
+├── 04_Zomato_SQL_Analysis
+│   ├── data/                  # Database schema & sample data
+│   ├── queries/               # Basic, intermediate & advanced SQL queries
+│   ├── images/                # ER diagram & query outputs
+│   └── README.md              # Zomato project documentation
+│
 └── README.md (this file)
+
 
 ```
 
@@ -88,6 +95,17 @@ Perfect for:
 * Referential integrity using foreign keys
 
 ✔ Skills used: Schema Design, Primary & Foreign Keys, Joins, Constraints, Data Validation, Analytical Queries
+
+### **4️⃣ Zomato Food Delivery SQL Analysis Project
+End-to-end analysis of a food delivery platform dataset
+City-wise and restaurant-wise revenue analysis
+Customer ordering frequency and behaviour analysis
+Rider efficiency analysis using average delivery times
+Order trends by day, month, and year
+Handling real-world time challenges (AM/PM format, midnight crossover)
+
+✔ Skills used: Joins, CTEs, Window Functions, Date & Time Functions, Aggregations, Subqueries, Ranking
+
 ---
 
 ## 🛠 **Technologies Used**
