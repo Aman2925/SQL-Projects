@@ -96,13 +96,14 @@ Perfect for:
 
 ✔ Skills used: Schema Design, Primary & Foreign Keys, Joins, Constraints, Data Validation, Analytical Queries
 
-### **4️⃣ Zomato Food Delivery SQL Analysis Project
-End-to-end analysis of a food delivery platform dataset
-City-wise and restaurant-wise revenue analysis
-Customer ordering frequency and behaviour analysis
-Rider efficiency analysis using average delivery times
-Order trends by day, month, and year
-Handling real-world time challenges (AM/PM format, midnight crossover)
+### **4️⃣ Zomato Food Delivery SQL Analysis Project**
+
+* End-to-end analysis of a food delivery platform dataset
+* City-wise and restaurant-wise revenue analysis
+* Customer ordering frequency and behaviour analysis
+* Rider efficiency analysis using average delivery times
+* Order trends by day, month, and year
+* Handling real-world time challenges (AM/PM format, midnight crossover)
 
 ✔ Skills used: Joins, CTEs, Window Functions, Date & Time Functions, Aggregations, Subqueries, Ranking
 
