@@ -157,13 +157,37 @@ This step ensures **accurate and reliable analysis**.
 
 ## Analysis & SQL Tasks
 
-### 1️⃣ Top Ordered Dishes by Customer
+** Task 1. Write a query to find the top 5 most frequently ordered dishes by customer called "Aman Singh" in the last 1 year.
 
-Identified the **top 5 most frequently ordered dishes** by a specific customer within the last year using:
+```sql
 
-* Aggregation
-* Window functions (`DENSE_RANK`)
-* Date filtering
+SELECT 
+	customer_name,
+    dish_name,
+	order_count
+FROM
+( -- table name
+SELECT 
+	c.customer_name,
+    o.order_item as dish_name,
+    COUNT(*) as order_count,
+    DENSE_RANK() OVER(ORDER BY COUNT(*)DESC) AS rnk
+FROM zomato_db.customers AS c
+JOIN
+zomato_db.orders AS o
+ON c.customer_id = o.customer_id
+WHERE o.order_date >= (
+		SELECT DATE_SUB(MAX(order_date),INTERVAL 1 YEAR)
+		FROM 
+		zomato_db.orders
+) and c.customer_name = 'Aman Singh'
+GROUP BY c.customer_name,
+		 o.order_item
+ORDER BY order_count DESC
+) as t1
+WHERE rnk <=5;
+
+```
 
 ---
 
