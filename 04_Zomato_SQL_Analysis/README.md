@@ -191,7 +191,7 @@ WHERE rnk <=5;
 
 ### 2️⃣ Popular Time Slots Analysis
 
-** Identify the time slots during which the most orders are placed. based on 2-hour intervals.
+** Identify the time slots during which the most orders are placed. based on 2-hour intervals.**
 
 ```sql
 SELECT 
