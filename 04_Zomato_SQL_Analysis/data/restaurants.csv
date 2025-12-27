@@ -1,0 +1,51 @@
+restaurant_id,restaurant_name,city,opening_hours
+1,The Bombay Canteen,Mumbai,10:00 AM - 11:00 PM
+2,Leopold Cafe,Bengaluru,11:00 AM - 11:00 PM
+3,Ziya,Delhi,11:00 AM - 11:00 PM
+4,Gajalee,Mumbai,6:00 PM - 3:00 AM
+5,Masala Library,Mumbai,7:00 AM - 11:00 PM
+6,Mahesh Lunch Home,Hyderabad,10:00 AM - 11:00 PM
+7,Yauatcha,Mumbai,10:00 AM - 11:00 PM
+8,Britannia & Co.,Delhi,11:00 AM - 11:00 PM
+9,Indigo Delicatessen,Mumbai,7:00 AM - 11:00 PM
+10,Indian Accent,Delhi,6:00 PM - 3:00 AM
+11,Karim’s,Hyderabad,11:00 AM - 11:00 PM
+12,Bukhara,Hyderabad,7:00 AM - 11:00 PM
+13,Moti Mahal,Bengaluru,10:00 AM - 11:00 PM
+14,SodaBottleOpenerWala,Delhi,6:00 PM - 3:00 AM
+15,Gulati,Hyderabad,12:00 PM - 12:00 AM
+16,Saravana Bhavan,Bengaluru,11:00 AM - 11:00 PM
+17,The Big Chill Cafe,Delhi,12:00 PM - 12:00 AM
+18,Farzi Cafe,Mumbai,10:00 AM - 11:00 PM
+19,Lodi - The Garden Restaurant,Hyderabad,10:00 AM - 11:00 PM
+20,Perch Wine & Coffee Bar,Bengaluru,12:00 PM - 12:00 AM
+21,Cafe Delhi Heights,Bengaluru,10:00 AM - 11:00 PM
+22,Olive Bar & Kitchen,Hyderabad,7:00 AM - 11:00 PM
+23,Imly,Mumbai,12:00 PM - 3:00 PM; 7:00 PM - 11:00 PM
+24,Sagar Ratna,Mumbai,7:00 AM - 11:00 PM
+25,Toit,Bengaluru,6:00 PM - 3:00 AM
+26,Koshy’s,Bengaluru,7:00 AM - 11:00 PM
+27,Vidyarthi Bhavan,Delhi,6:00 PM - 3:00 AM
+28,The Only Place,Mumbai,10:00 AM - 11:00 PM
+29,Truffles,Delhi,12:00 PM - 12:00 AM
+30,Empire Restaurant,Mumbai,11:00 AM - 11:00 PM
+31,Corner House,Mumbai,12:00 PM - 3:00 PM; 7:00 PM - 11:00 PM
+32,The 13th Floor,Bengaluru,12:00 PM - 3:00 PM; 7:00 PM - 11:00 PM
+33,The Fatty Bao,Bengaluru,11:00 AM - 11:00 PM
+34,Windmills Craftworks,Bengaluru,12:00 PM - 12:00 AM
+35,Ebony,Delhi,6:00 PM - 3:00 AM
+36,Meghana Foods,Bengaluru,6:00 PM - 3:00 AM
+37,Brahmin’s Coffee Bar,Mumbai,7:00 AM - 11:00 PM
+38,Nagarjuna,Delhi,7:00 AM - 11:00 PM
+39,The Hole in the Wall Cafe,Delhi,11:00 AM - 11:00 PM
+40,Lazy Suzy,Hyderabad,12:00 PM - 3:00 PM; 7:00 PM - 11:00 PM
+41,Fava,Bengaluru,6:00 PM - 3:00 AM
+42,Social,Delhi,6:00 PM - 3:00 AM
+43,Barbeque Nation,Bengaluru,10:00 AM - 11:00 PM
+44,Mainland China,Delhi,10:00 AM - 11:00 PM
+45,Hitchki,Bengaluru,12:00 PM - 3:00 PM; 7:00 PM - 11:00 PM
+46,Global Fusion,Bengaluru,10:00 AM - 11:00 PM
+47,Punjab Grill,Delhi,7:00 AM - 11:00 PM
+48,Bar Stock Exchange,Bengaluru,11:00 AM - 11:00 PM
+49,Cafe Bahar,Hyderabad,12:00 PM - 3:00 PM; 7:00 PM - 11:00 PM
+50,Paradise Biryani,Hyderabad,11:00 AM - 11:00 PM
