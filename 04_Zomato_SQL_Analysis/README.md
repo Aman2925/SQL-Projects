@@ -231,22 +231,87 @@ ORDER BY order_count DESC;
 
 ### 3️⃣ Order Value Analysis
 
-Calculated **average order value (AOV)** for customers placing more than 10 orders to identify high-value customers.
+**Find the average order value per customer who has placed more than 10 orders.
+Return customer_name, and aov (average order value)**
 
+```sql
+
+SELECT
+    c.customer_name,
+    ROUND(AVG(o.total_amount), 2) AS aov
+FROM zomato_db.orders o
+INNER JOIN zomato_db.customers c
+    ON c.customer_id = o.customer_id
+GROUP BY 
+    c.customer_id,
+    c.customer_name
+HAVING COUNT(o.order_id) > 10
+ORDER BY aov DESC;
+
+```
 ---
 
 ### 4️⃣ High-Value Customers
 
-Identified customers who spent **more than ₹5,000** across all orders.
+**List the customers who have spent more than 5K in total on food orders.
+   return customer_name,customer_id and total_spent !**
 
+```sql
+
+SELECT 
+	o.customer_id,
+	c.customer_name,
+	SUM(total_amount) as total_spent
+FROM 
+	zomato_db.orders as o
+JOIN
+	zomato_db.customers as c
+ON
+	c.customer_id = o.customer_id
+GROUP BY o.customer_id,c.customer_name
+HAVING total_spent > 5000
+ORDER BY total_spent DESC;
+
+```
 ---
 
 ### 5️⃣ Restaurant Revenue Ranking
 
-Ranked restaurants **within each city** based on total revenue from the last year using:
+**Rank restaurants by their total revenue from the last year, including their name, total revenue, and rank within their city**
 
-* CTEs
-* `RANK()` window function
+```sql
+
+WITH ranking_table 
+AS
+(
+	SELECT
+		r.restaurant_name,
+		r.city,
+		SUM(total_amount) AS total_revenue,
+		RANK() OVER (PARTITION BY r.city ORDER BY SUM(total_amount) DESC) AS rnk
+	FROM 
+		zomato_db.orders AS o
+	JOIN 
+		zomato_db.restaurants AS r
+	ON 
+		r.restaurant_id = o.restaurant_id
+	WHERE order_date >= 
+		(
+			SELECT DATE_SUB(MAX(order_date),INTERVAL 1 YEAR)
+				FROM zomato_db.orders
+		
+		)
+	GROUP BY r.restaurant_id,r.restaurant_name,r.city
+)
+
+SELECT 
+	restaurant_name,
+    city,
+    total_revenue
+FROM ranking_table 
+WHERE rnk = 1;
+
+```
 
 ---
 
