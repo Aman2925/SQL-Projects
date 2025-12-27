@@ -40,7 +40,7 @@ Relationships are maintained using **primary and foreign keys**, simulating real
 
 ## Database Setup
 
-- ** Database Creation**: Created a database named `zomato_db`.
+- **Database Creation**: Created a database named `zomato_db`.
 - **Table Creation**: Created tables for customers, restaurants, orders, deliveries, and riders. Each table includes relevant columns and relationships.
 
 ```sql
