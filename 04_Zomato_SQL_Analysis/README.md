@@ -839,14 +839,15 @@ It reflects how SQL is used in **data analytics roles** to derive insights, eval
 
 ## Author
 
-**Aman Shah**
-🎓 B.Tech Engineering Student
-📍 Mumbai, India
-💼 Aspiring Data Analyst
+**Aman Shah**  
+🎓 B.Tech Engineering Student  
+📍 Mumbai, India  
+💼 Aspiring Data Analyst  
 
-🔗 GitHub: [https://github.com/Aman2925]
-🔗 LinkedIn: [https://www.linkedin.com/in/aman-shah-546775255/](https://www.linkedin.com/in/aman-shah-546775255/)
+🔗 GitHub: https://github.com/Aman2925  
+🔗 LinkedIn: https://www.linkedin.com/in/aman-shah-546775255/
 
 ---
+
 
 
