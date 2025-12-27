@@ -474,9 +474,7 @@ FROM growth_ratio;
 ---
 
 ### 1️⃣1️⃣ Customer Segmentation
-**-- Customer Segmentation: Segment customers into 'Gold' or 'Silver' groups based on their total spending**
-**-- compared to the average order value (AOV). If a customer's total spending exceeds the AOV**
-**-- label them as 'Gold"; otherwise, label them as 'Silver'. Write an SQL query to determine each segment's total number of orders and total revenue**
+**Segment customers into 'Gold' or 'Silver' groups based on their total spending compared to the average order value (AOV). If a customer's total spending exceeds the AOV, label them as 'Gold'; otherwise, label them as 'Silver'. Write an SQL query to determine each segment's total number of orders and total revenue**
 
 ```sql
 
