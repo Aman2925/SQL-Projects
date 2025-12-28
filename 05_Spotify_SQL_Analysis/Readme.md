@@ -12,6 +12,9 @@ The project demonstrates the use of **SQL aggregations, CTEs, window functions, 
 
 ---
 
+![Spotify Music Data Analysis Project](2024-spotify-brand-assets-media-kit.jpg)
+
+
 ## Objectives
 
 1. Analyze **track, album, and artist-level performance**
