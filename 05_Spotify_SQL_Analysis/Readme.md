@@ -115,31 +115,121 @@ This ensured the dataset was reliable and ready for analysis.
 
 ### 1️⃣ Tracks Streamed More on Spotify than YouTube
 
-This query compares total streams across platforms and identifies tracks that perform better on Spotify than on YouTube using conditional aggregation.
+```sql
+
+WITH streaming_config 
+AS 
+(
+SELECT 
+	track,
+    COALESCE(SUM(CASE WHEN most_played_on = 'Youtube' THEN stream END),0) AS streamed_on_Youtube,
+    COALESCE(SUM(CASE WHEN most_played_on = 'Spotify' THEN stream END),0) AS streamed_on_Spotify
+FROM spotify
+GROUP BY track
+)
+
+SELECT 
+	track,
+    streamed_on_Spotify
+FROM streaming_config 
+WHERE streamed_on_Spotify > streamed_on_Youtube;
+
+```
 
 ---
 
 ### 2️⃣ Top 3 Most-Viewed Tracks for Each Artist
 
-Using window functions (`DENSE_RANK`), this query ranks tracks based on views within each artist group and extracts the top three tracks per artist.
+```sql
+
+WITH TOP_3 
+AS 
+(
+SELECT 
+	artist,
+	track,
+    SUM(views) AS Views,
+    DENSE_RANK() OVER (PARTITION BY artist ORDER BY SUM(views) DESC) AS rnk
+FROM spotify
+GROUP BY artist,track
+)
+
+SELECT 
+	artist,
+    track,
+    VIEWS
+FROM TOP_3
+WHERE rnk<=3;
+
+```
 
 ---
 
 ### 3️⃣ Cumulative Sum of Likes Ordered by Views
 
-This analysis calculates the running total of likes when tracks are ordered by total views, demonstrating how engagement accumulates with popularity.
+```sql
+
+SELECT
+    track,
+    total_views,
+    total_likes,
+    SUM(total_likes) OVER (
+        ORDER BY total_views DESC
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS cumulative_likes
+FROM (
+    SELECT
+        track,
+        SUM(views) AS total_views,
+        SUM(likes) AS total_likes
+    FROM spotify
+    GROUP BY track
+) t
+ORDER BY total_views DESC;
+
+```
 
 ---
 
 ### 4️⃣ Energy Variation Across Albums
 
-A CTE is used to calculate the difference between the highest and lowest energy values for tracks within each album, helping identify albums with diverse musical styles.
+
+```sql
+
+WITH album_energy_stats AS (
+    SELECT
+        album,
+        MAX(energy) AS max_energy,
+        MIN(energy) AS min_energy
+    FROM spotify
+    GROUP BY album
+)
+SELECT
+    album,
+    max_energy - min_energy AS energy_difference
+FROM album_energy_stats
+ORDER BY energy_difference DESC;
+
+
+```
 
 ---
 
 ### 5️⃣ Energy-to-Liveness Ratio Analysis
 
-This query identifies tracks where the energy-to-liveness ratio exceeds a defined threshold, helping distinguish studio-focused tracks from live-style performances.
+```sql
+
+SELECT
+    track,
+    artist,
+    energy,
+    liveness,
+    energy / liveness AS energy_liveness_ratio
+FROM spotify
+WHERE liveness > 0
+  AND energy / liveness > 1.2;
+
+```
 
 ---
 
