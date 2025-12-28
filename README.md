@@ -21,7 +21,7 @@ SQL-Projects/
 ├── 02_Retail_Sales_SQL
 │   ├── data/                  # Datasets for queries
 │   ├── retail_sales.sql       # SQL scripts
-│   └── README.md
+│   └── README.md              # Project documentation
 │
 ├── 03_Library_Management_SQL
 │   ├── data/                  # CSV datasets (books, members, issues, returns)
@@ -32,10 +32,17 @@ SQL-Projects/
 ├── 04_Zomato_SQL_Analysis
 │   ├── data/                  # Database schema & sample data
 │   ├── queries/               # Basic, intermediate & advanced SQL queries
-│   ├── images/                # ER diagram & query outputs
+│   ├── images/                # ER diagrams & query outputs
 │   └── README.md              # Zomato project documentation
 │
-└── README.md (this file)
+├── 05_Spotify_SQL_Analysis
+│   ├── data/                  # Spotify dataset (CSV)
+│   ├── queries/               # SQL analysis queries
+│   ├── images/                # Query outputs / screenshots
+│   └── README.md              # Spotify project documentation
+│
+└── README.md                  # Main portfolio README
+
 
 
 ```
@@ -106,6 +113,16 @@ Perfect for:
 * Handling real-world time challenges (AM/PM format, midnight crossover)
 
 ✔ Skills used: Joins, CTEs, Window Functions, Date & Time Functions, Aggregations, Subqueries, Ranking
+
+### **5️⃣ Spotify Music Data Analysis SQL Project**
+
+* Track-level, album-level, and artist-level performance analysis
+* Comparison of engagement metrics such as views, likes, and streams
+* Platform-wise analysis (Spotify vs YouTube performance)
+* Audio feature analysis including energy, liveness, tempo, and duration
+* Cumulative engagement analysis using window functions
+
+✔ Skills used: Aggregations, CTEs, Window Functions, Conditional Logic, Ranking, Analytical SQL
 
 ---
 
